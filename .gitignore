@@ -1,0 +1,16 @@
+# Terraform
+**/.terraform
+.tfstate.*
+
+# Python
+.venv
+__pycache__
+
+# Ruby
+vendor
+.bundle
+inspec.lock
+
+# Sops
+.gnupg
+
