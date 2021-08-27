@@ -29,19 +29,34 @@ spec:
     appns: podinfo
     applabel: "app.kubernetes.io/name=podinfo"
     appkind: deployment
-  chaosServiceAccount: k8s-chaos-admin
+  chaosServiceAccount: pod-io-stress-sa
   experiments:
-    - name: pod-io-stress
-      spec:
-        components:
-          env:
-            # set chaos duration (in sec) as desired
-            - name: TOTAL_CHAOS_DURATION
-              value: '120'
-
-            ## specify the size as percentage of free space on the file system
-            - name: FILESYSTEM_UTILIZATION_PERCENTAGE
-              value: '10'
-
-            - name: TARGET_POD
-              value: ''
+  - name: pod-io-stress
+    spec:
+      components:
+        env:
+        - name: TOTAL_CHAOS_DURATION
+          VALUE: '60'
+        # number of io workers
+        - name: NUMBER_OF_WORKERS
+          value: '1'
+        # percentage of free space of file system, need to be stressed
+        - name: FILESYSTEM_UTILIZATION_PERCENTAGE
+          value: '10' #in GB
+        # path need to be stressed/filled
+        # - name: VOLUME_MOUNT_PATH
+        #   value: '/data'
+        # size of io to be stressed
+        # - name: FILESYSTEM_UTILIZATION_BYTES
+        #   value: '1' #in GB
+        # runtime for the container
+        # supports docker, containerd, crio
+        # - name: CONTAINER_RUNTIME
+        #   value: 'docker'
+        # path of the socket file
+        # - name: SOCKET_PATH
+        #   value: '/var/run/docker.sock'
+        # name of lib
+        # it supports litmus and pumba lib
+        # - name: LIB
+        #   value: 'pumba'

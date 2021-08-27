@@ -16,7 +16,7 @@
 apiVersion: litmuschaos.io/v1alpha1
 kind: ChaosEngine
 metadata:
-  name: pod-dns-spoof
+  name: pod-dns-error
   namespace: litmus
 spec:
   # It can be delete/retain
@@ -29,23 +29,22 @@ spec:
     appns: podinfo
     applabel: "app.kubernetes.io/name=podinfo"
     appkind: deployment
-  chaosServiceAccount: k8s-chaos-admin
+  chaosServiceAccount: pod-dns-error-sa
   experiments:
-    - name: pod-dns-spoof
-      spec:
-        components:
-          env:
-            # map of the target hostnames eg. '{"abc.com":"spoofabc.com"}' . If empty no queries will be spoofed
-            - name: SPOOF_MAP
-              value: '{"google.com":"fakegoogle.com"}'
-
-            - name: TOTAL_CHAOS_DURATION
-              value: "60" # in seconds
-
-            # provide the name of container runtime, it supports docker, containerd, crio
-            - name: CONTAINER_RUNTIME
-              value: "docker"
-
-            # provide the socket file path
-            - name: SOCKET_PATH
-              value: "/var/run/docker.sock"
+  - name: pod-dns-error
+    spec:
+      components:
+        env:
+        ## comma separated list of host names
+        ## if not provided, all hostnames/domains will be targeted
+        - name: TARGET_HOSTNAMES
+          value: '["litmuschaos","chaosnative.com"]'
+        - name: TOTAL_CHAOS_DURATION
+          value: '60'
+        # runtime for the container
+        # supports docker, containerd, crio
+        # - name: CONTAINER_RUNTIME
+        #   value: 'docker'
+        # path of the socket file
+        # - name: SOCKET_PATH
+        #   value: '/var/run/docker.sock'

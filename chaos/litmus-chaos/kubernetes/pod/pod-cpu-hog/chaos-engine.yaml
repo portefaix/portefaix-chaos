@@ -17,7 +17,7 @@
 apiVersion: litmuschaos.io/v1alpha1
 kind: ChaosEngine
 metadata:
-  name: pod-delete
+  name: pod-cpu-hog
   namespace: litmus
 spec:
   # It can be delete/retain
@@ -30,16 +30,27 @@ spec:
     appns: podinfo
     applabel: "app.kubernetes.io/name=podinfo"
     appkind: deployment
-  chaosServiceAccount: k8s-chaos-admin
+  chaosServiceAccount: pod-cpu-hog-sa
   experiments:
-    - name: pod-cpu-hog
-      spec:
-        components:
-          env:
-            #number of cpu cores to be consumed
-            #verify the resources the app has been launched with
-            - name: CPU_CORES
-              value: '1'
-
-            - name: TOTAL_CHAOS_DURATION
-              value: '60' # in seconds
+  - name: pod-cpu-hog
+    spec:
+      components:
+        env:
+        - name: TOTAL_CHAOS_DURATION
+          value: '60'
+        # cpu cores for stress
+        - name: CPU_CORES
+          value: '1'
+        # runtime for the container
+        # supports docker, containerd, crio
+        # - name: CONTAINER_RUNTIME
+        #   value: 'docker'
+        # path of the socket file
+        # - name: SOCKET_PATH
+        #   value: '/var/run/docker.sock'
+        # supports litmus and pumba
+        # - name: LIB
+        #   value: 'pumba'
+        # stress image - applicable for pumba only
+        # - name: STRESS_IMAGE
+        #   value: 'alexeiled/stress-ng:latest-ubuntu'
