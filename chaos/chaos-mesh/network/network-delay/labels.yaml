@@ -13,20 +13,17 @@
 # limitations under the License.
 
 ---
-apiVersion: chaos-mesh.org/v1alpha1
-kind: HTTPChaos
+apiVersion: builtin
+kind: LabelTransformer
 metadata:
-  name: nginx-http-delay
-spec:
-  mode: all
-  selector:
-    namespaces:
-      - podinfo
-    labelSelectors:
-      "app.kubernetes.io/name": "podinfo"
-  target: Request
-  port: 80
-  delay: 2s
-  method: GET
-  path: /
-  duration: 5m
+  name: labelTransformer
+labels:
+  app.kubernetes.io/name: network-delay
+  app.kubernetes.io/instance: chaos-mesh-network-delay
+  app.kubernetes.io/component: chaos-experiments
+  app.kubernetes.io/version: v0.1.0
+  app.kubernetes.io/part-of: portefaix-chaos-mesh
+  app.kubernetes.io/managed-by: kustomize
+fieldSpecs:
+- path: metadata/labels
+  create: true
