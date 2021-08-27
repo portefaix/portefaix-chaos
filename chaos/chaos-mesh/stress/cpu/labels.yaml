@@ -13,22 +13,17 @@
 # limitations under the License.
 
 ---
-apiVersion: chaos-mesh.org/v1alpha1
-kind: IoChaos
+apiVersion: builtin
+kind: LabelTransformer
 metadata:
-  name: io-delay
-  namespace: chaos-mesh
-spec:
-  action: fault
-  mode: one
-  value: ''
-  selector:
-    namespaces:
-      - podinfo
-    labelSelectors:
-      "app.kubernetes.io/name": "podinfo"
-  volumePath: /var/run/etcd
-  path: '/var/run/etcd/**/*'
-  errno: 32
-  percent: 50
-  duration: '10s'
+  name: labelTransformer
+labels:
+  app.kubernetes.io/name: burn-cpu
+  app.kubernetes.io/instance: chaos-mesh-burn-cpu
+  app.kubernetes.io/component: chaos-experiments
+  app.kubernetes.io/version: v0.1.0
+  app.kubernetes.io/part-of: portefaix-chaos-mesh
+  app.kubernetes.io/managed-by: kustomize
+fieldSpecs:
+- path: metadata/labels
+  create: true
