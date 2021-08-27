@@ -16,7 +16,7 @@
 apiVersion: litmuschaos.io/v1alpha1
 kind: ChaosEngine
 metadata:
-  name: docker-service-kill
+  name: kubelet-service-kill
   namespace: litmus
 spec:
   # It can be delete/retain
@@ -25,23 +25,18 @@ spec:
   annotationCheck: true
   # It can be active/stop
   engineState: active
-  appinfo:
-    appns: podinfo
-    applabel: "app.kubernetes.io/name=podinfo"
-    appkind: deployment
-  chaosServiceAccount: k8s-chaos-admin
+  chaosServiceAccount: kubelet-service-kill-sa
   experiments:
-    - name: docker-service-kill
+    - name: kubelet-service-kill
       spec:
         components:
         # nodeSelector:
         #   # provide the node labels
         #   kubernetes.io/hostname: 'node02'
           env:
-            # set chaos duration (in sec) as desired
             - name: TOTAL_CHAOS_DURATION
-              value: '90'
+              value: '90' # in seconds
 
-             # provide the actual name of node under test
-            - name: APP_NODE
+             # provide the target node name
+            - name: TARGET_NODE
               value: 'node-01'

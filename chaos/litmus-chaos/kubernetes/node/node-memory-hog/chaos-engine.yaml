@@ -16,31 +16,25 @@
 apiVersion: litmuschaos.io/v1alpha1
 kind: ChaosEngine
 metadata:
-  name: kubelet-service-kill
+  name: node-memory-hog
   namespace: litmus
 spec:
-  # It can be delete/retain
-  jobCleanUpPolicy: delete
-  # It can be true/false
-  annotationCheck: true
-  # It can be active/stop
-  engineState: active
-  appinfo:
-    appns: podinfo
-    applabel: "app.kubernetes.io/name=podinfo"
-    appkind: deployment
-  chaosServiceAccount: k8s-chaos-admin
+  engineState: "active"
+  annotationCheck: "false"
+  chaosServiceAccount: node-memory-hog-sa
   experiments:
-    - name: kubelet-service-kill
-      spec:
-        components:
-        # nodeSelector:
-        #   # provide the node labels
-        #   kubernetes.io/hostname: 'node02'
-          env:
-            - name: TOTAL_CHAOS_DURATION
-              value: '90' # in seconds
-
-             # provide the target node name
-            - name: TARGET_NODE
-              value: 'node-01'
+  - name: node-memory-hog
+    spec:
+      components:
+        env:
+        # percentage of total node capacity to be stressed
+        - name: MEMORY_CONSUMPTION_PERCENTAGE
+          value: '10' # in percentage
+        # node memory to be stressed
+        # - name: MEMORY_CONSUMPTION_MEBIBYTES
+        #   value: '500' # in MiBi
+        # total number of workers involved in stress
+        - name: NUMBER_OF_WORKERS
+          value: '1'
+        - name: TOTAL_CHAOS_DURATION
+          VALUE: '60'
