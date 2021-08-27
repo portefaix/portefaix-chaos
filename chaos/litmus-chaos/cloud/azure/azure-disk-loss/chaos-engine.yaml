@@ -1,0 +1,38 @@
+# Copyright (C) 2021 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata:
+  name: azure-disk-loss
+spec:
+  engineState: "active"
+  annotationCheck: "false"
+  chaosServiceAccount: azure-disk-loss-sa
+  experiments:
+  - name: azure-disk-loss
+    spec:
+      components:
+        env:
+        # comma separated names of the azure disks attached to scale set VMs
+        - name: VIRTUAL_DISK_NAMES
+          value: 'disk-01,disk-02'
+        # name of the resource group
+        - name: RESOURCE_GROUP
+          value: '<resource group of VIRTUAL_DISK_NAMES>'
+        # VM belongs to scale set or not
+        - name: SCALE_SET
+          value: 'enable'
+        - name: TOTAL_CHAOS_DURATION
+          VALUE: '60'

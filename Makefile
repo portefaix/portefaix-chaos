@@ -36,6 +36,9 @@ check: check-kubectl ## Check requirements
 validate: ## Execute git-hooks
 	@pre-commit run -a
 
+.PHONY: release-prepare
+release-prepare: guard-VERSION ## Update release label (VERSION=xxx)
+	./hack/scripts/update-manifests-version.sh chaos $(VERSION)
 
 # ====================================
 # K I N D

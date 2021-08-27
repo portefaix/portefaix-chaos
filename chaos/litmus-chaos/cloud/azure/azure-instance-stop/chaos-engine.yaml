@@ -1,0 +1,39 @@
+# Copyright (C) 2021 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata:
+  name: azure-instance-stop
+  namespace: litmus
+spec:
+  engineState: "active"
+  annotationCheck: "false"
+  chaosServiceAccount: azure-instance-stop-sa
+  experiments:
+  - name: azure-instance-stop
+    spec:
+      components:
+        env:
+        # comma separated list of azure instance names
+        - name: AZURE_INSTANCE_NAME
+          value: 'instance-01,instance-02'
+        # name of the resource group
+        - name: RESOURCE_GROUP
+          value: '<resource group of Scale set>'
+        # accepts enable/disable value. default is disable
+        - name: SCALE_SET
+          value: 'enable'
+        - name: TOTAL_CHAOS_DURATION
+          VALUE: '60'
