@@ -16,6 +16,10 @@
 
 # Labels for action/labeler
 
-kind/documentation:
-  - docs/*
-  - docs/**/*
+area/litmus-chaos:
+- changed-files:
+  - any-glob-to-any-file: chaos/litmus-chaos/**
+
+area/chaos-mesh:
+- changed-files:
+  - any-glob-to-any-file: chaos/chaos-mesh/**
