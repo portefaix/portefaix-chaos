@@ -1,6 +1,7 @@
 {
   "tags": {
     "Name": "fis-unavailable-error",
+    "Service": "ec2",
     "Part-Of": "portefaix-aws-fis",
     "Version": "0.1.0",
     "Managed-By": "AWS"

@@ -1,0 +1,60 @@
+{
+  "tags": {
+    "Name": "fis-aurora-faultinjection",
+    "Service": "rds",
+    "Part-Of": "portefaix-aws-fis",
+    "Version": "0.1.0",
+    "Managed-By": "AWS"
+  },
+  "description": "fis-aurora-faultinjection",
+  "targets": {
+    "<INSTANCE_ID>": {
+      "resourceType": "aws:ec2:instance",
+      "resourceArns": [
+        "targetinstance"
+      ],
+      "selectionMode": "ALL"
+    }
+  },
+  "actions": {
+    "fis-aurora-diskcongestion": {
+      "actionId": "aws:ssm:send-command",
+      "description": "fis-aurora-diskcongestion",
+      "parameters": {
+        "documentArn": "ssmdocument",
+        "documentParameters": "{\"ActionType\": \"diskcongestion\"}",
+        "duration": "PT1M"
+      },
+      "targets": {
+        "Instances": "<INSTANCE_ID>"
+      },
+      "startAfter": [
+        "fis-aurora-replicafailure"
+      ]
+    },
+    "fis-aurora-replicafailure": {
+      "actionId": "aws:ssm:send-command",
+      "description": "fis-aurora-replicafailure",
+      "parameters": {
+        "documentArn": "ssmdocument",
+        "documentParameters": "{\"ActionType\": \"replicafailure\"}",
+        "duration": "PT1M"
+      },
+      "targets": {
+        "Instances": "<INSTANCE_ID>"
+      }
+    }
+  },
+  "stopConditions": [
+    {
+      "source": "none"
+    }
+  ],
+  "roleArn": "rolearn",
+  "logConfiguration": {
+    "cloudWatchLogsConfiguration": {
+      "logGroupArn": "loggrouparn"
+    },
+    "logSchemaVersion": 2
+  }
+}

@@ -1,0 +1,33 @@
+{
+    "tags": {
+        "Name": "fis-eks-terminate-nodegroup-instances",
+        "Service": "eks",
+        "Part-Of": "portefaix-aws-fis",
+        "Version": "0.1.0",
+        "Managed-By": "AWS"
+    },
+    "description": "Terminate EKS nodes",
+    "targets": {
+        "eks-nodes": {
+            "resourceType": "aws:eks:nodegroup",
+            "resourceArns": [
+                "<EKS_NODE_GROUP>"
+            ],
+            "selectionMode": "ALL"
+        }
+    },
+    "actions": {
+        "TerminateInstances": {
+            "actionId": "aws:eks:terminate-nodegroup-instances",
+            "description": "terminate the node instances",
+            "parameters": {
+                "instanceTerminationPercentage": "40"
+            },
+            "targets": {
+                "Nodegroups": "eks-nodes"
+            }
+        }
+    },
+    "stopConditions": "<EKS_ALARM>",
+    "roleArn": "${role}"
+}
