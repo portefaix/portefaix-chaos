@@ -1,0 +1,38 @@
+{
+    "tags": {
+        "Name": "fis-cpu-stress-test",
+        "Service": "ec2",
+        "Part-Of": "portefaix-aws-fis",
+        "Version": "0.1.0",
+        "Managed-By": "AWS"
+    },
+    "description": "Runs a CPU stress on an instance using the stress-ng tool. Uses the AWS provided document - AWSFIS-Run-CPU-Stress",
+    "targets": {
+        "myInstance": {
+            "resourceType": "aws:ec2:instance",
+            "resourceArns": ["arn:aws:ec2:eu-west-1:<ACCOUNT_ID>:instance/<INSTANCE_ID>"],
+            "selectionMode": "ALL"
+        }
+    },
+    "actions": {
+        "CPUBurn": {
+            "actionId": "aws:ssm:send-command",
+            "description": "CPU stress",
+            "parameters": {
+                "duration": "PT2M",
+                "documentArn": "arn:aws:ssm:eu-west-1::document/AWSFIS-Run-CPU-Stress",
+                "documentParameters": "{\"DurationSeconds\": \"60\", \"InstallDependencies\": \"True\", \"CPU\" : \"0\"}"
+            },
+            "targets": {
+                "Instances": "<INSTANCE_ID>"
+            }
+        }
+    },
+    "stopConditions": [
+        {
+          "source": "aws:cloudwatch:alarm",
+          "value": "arn:aws:cloudwatch:eu-west-1:<ACCOUNT_ID>:alarm:<CLOUDWATCH_ALARM>"
+        }
+      ],
+      "roleArn": "arn:aws:iam::<ACCOUNT_ID>:role/<IAM_ROLE>"
+    }
