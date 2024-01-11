@@ -1,0 +1,51 @@
+{
+    "tags": {
+        "Name": "fis-stop-instance-az",
+        "Part-Of": "portefaix-aws-fis",
+        "Version": "0.1.0",
+        "Managed-By": "AWS"
+    },
+    "description": "Stop and restart after 5min all running instances tagged with Purpose:chaos-ready in eu-west-1b",
+    "targets": {
+        "toStop": {
+            "resourceType": "aws:ec2:instance",
+            "resourceTags": {
+                "Purpose": "chaos-ready"
+            },
+            "filters": [
+                {
+                    "path": "Placement.AvailabilityZone",
+                    "values": ["eu-west-1b"]
+                },
+                {
+                    "path": "State.Name",
+                    "values": ["running"]
+                },
+                {
+                    "path": "VpcId",
+                    "values": [ "<VPC_ID>"]
+                }
+                ],
+            "selectionMode": "ALL"
+        }
+    },
+    "actions": {
+        "StopInstances": {
+            "actionId": "aws:ec2:stop-instances",
+            "description": "stop the instances",
+            "parameters": {
+                "startInstancesAfterDuration": "PT5M"
+            },
+            "targets": {
+                "Instances": "toStop"
+            }
+        }
+    },
+    "stopConditions": [
+        {
+            "source": "aws:cloudwatch:alarm",
+            "value": "arn:aws:cloudwatch:eu-west-1:<ACCOUNT_ID>:alarm:<CLOUDWATCH_ALARM>"
+        }
+    ],
+    "roleArn": "arn:aws:iam::<ACCOUNT_ID>:role/<IAM_ROLE>"
+}
