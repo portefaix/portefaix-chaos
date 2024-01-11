@@ -36,5 +36,9 @@ labels:
   description: "Chaos Mesh"
   color: "cc317c"
 
+- name: "area/aws-fis"
+  description: "AWS FIS"
+  color: "cc317c"
+
 ## DEPENDENCY
 
